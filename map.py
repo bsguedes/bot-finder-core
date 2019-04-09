@@ -9,6 +9,7 @@ REDUCTION_RATE = 90
 TREE_PERCENTAGE = 15
 RIVERS = 10
 RIVER_LEVEL = 20
+LANDMARKS = 100
 
 
 class Map:
@@ -38,6 +39,18 @@ class Map:
             x, y = self.find_water_point()
             upwards(x, y, self.board, RIVER_LEVEL)
             print("And there were rivers... after %.2f seconds." % (time.time() - start))
+
+    def add_landmarks(self):
+        start = time.time()
+        print('Let there be trees')
+        for i in range(LANDMARKS):
+            x, y = self.find_elevation_point(WATER_LEVEL)
+            if self.trees[x][y] == 0:
+                self.board[x][y] = TOP_LEVEL + i
+                self.board[x+1][y] = TOP_LEVEL + i
+                self.board[x][y+1] = TOP_LEVEL + i
+                self.board[x+1][y+1] = TOP_LEVEL + i
+        print("And there were landmarks... after %.2f seconds." % (time.time() - start))
 
     def find_water_point(self):
         while True:
@@ -77,6 +90,9 @@ class Map:
 
     def tree_level(self):
         return TREE_LEVEL
+
+    def top_level(self):
+        return TOP_LEVEL
 
 
 def red(v):

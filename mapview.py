@@ -9,11 +9,14 @@ class MapView:
         image = Image.new("RGB", (self.map.size(), self.map.size()))
         for x in range(0, self.map.size()):
             for y in range(0, self.map.size()):
-                image.putpixel((x, y), self.color(self.map.board[x][y], self.map.trees[x][y]).get_tuple())
+                image.putpixel((x, y), self.color(x, y).get_tuple())
         image.save("Generated.png")
         image.show()
 
-    def color(self, v, t):
+    def color(self, x, y):
+        v, t = self.map.board[x][y], self.map.trees[x][y]
+        if v >= self.map.top_level():
+            return Color(255, 0, 0)
         if v < self.map.water_level():
             return Color(0, 0, 255)
         elif t > self.map.tree_level():
