@@ -10,6 +10,21 @@ class MapView:
         for x in range(0, self.map.size()):
             for y in range(0, self.map.size()):
                 image.putpixel((x, y), self.color(x, y).get_tuple())
+        for (x, y) in self.map.players:
+            image.putpixel((x+1, y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((x+1, y), Color(0, 0, 0).get_tuple())
+            image.putpixel((x+1, y+1), Color(0, 0, 0).get_tuple())
+            image.putpixel((x, y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((x, y), Color(0, 0, 0).get_tuple())
+            image.putpixel((x, y+1), Color(0, 0, 0).get_tuple())
+            image.putpixel((x-1, y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((x-1, y), Color(0, 0, 0).get_tuple())
+            image.putpixel((x-1, y+1), Color(0, 0, 0).get_tuple())
+        for (x, y) in self.map.landmarks:
+            image.putpixel((x + 1, y + 1), Color(255, 0, 0).get_tuple())
+            image.putpixel((x + 1, y), Color(255, 0, 0).get_tuple())
+            image.putpixel((x, y), Color(255, 0, 0).get_tuple())
+            image.putpixel((x, y + 1), Color(255, 0, 0).get_tuple())
         image.save("Generated.png")
         image.show()
 
@@ -17,7 +32,7 @@ class MapView:
         v, t = self.map.board[x][y], self.map.trees[x][y]
         if v >= self.map.top_level():
             return Color(255, 0, 0)
-        if v < self.map.water_level():
+        elif v < self.map.water_level():
             return Color(0, 0, 255)
         elif t > self.map.tree_level():
             return Color(64, 128, 0)
