@@ -1,12 +1,14 @@
 import random
 import time
 
-SIZE = 800
+SIZE = 900
 TOP_LEVEL = 100
-WATER_LEVEL = 1
-TREE_LEVEL = 50
-REDUCTION_RATE = 50
-TREE_PERCENTAGE = 20
+WATER_LEVEL = 5
+TREE_LEVEL = 30
+REDUCTION_RATE = 90
+TREE_PERCENTAGE = 15
+RIVERS = 10
+RIVER_LEVEL = 20
 
 
 class Map:
@@ -17,7 +19,7 @@ class Map:
     def add_land(self):
         start = time.time()
         print('Let there be land')
-        generate(int(SIZE / 2), int(SIZE / 2), self.board, 0, generate_bias(0.99))
+        generate(int(SIZE / 2), int(SIZE / 2), self.board, 0, generate_bias(0.999))
         print("And there was land... after %.2f seconds." % (time.time() - start))
 
     def add_trees(self):
@@ -28,6 +30,21 @@ class Map:
             x, y = self.find_elevation_point(WATER_LEVEL)
             generate(x, y, self.trees, random.randrange(TREE_LEVEL, TOP_LEVEL), generate_bias(0.93))
             print("And there were trees... after %.2f seconds." % (time.time() - start), self.tree_area(), land)
+
+    def add_rivers(self):
+        start = time.time()
+        print('Let there be rivers')
+        for _ in range(RIVERS):
+            x, y = self.find_water_point()
+            upwards(x, y, self.board, RIVER_LEVEL)
+            print("And there were rivers... after %.2f seconds." % (time.time() - start))
+
+    def find_water_point(self):
+        while True:
+            x = int(random.random() * SIZE)
+            y = int(random.random() * SIZE)
+            if self.board[x][y] < WATER_LEVEL:
+                return x, y
 
     def find_elevation_point(self, level):
         while True:
@@ -72,6 +89,16 @@ def generate_bias(minimum):
     if random.random() < 0.5:
         bias[random.randint(0, 3)] = random.uniform(minimum, 1)
     return bias
+
+
+def upwards(x, y, target, level):
+    while target[x][y] < level:
+        target[x][y] = 0
+        if 0 < x < SIZE - 1 and 0 < y < SIZE - 1:
+            v, x, y = max([(target[x - 1][y], x - 1, y), (target[x + 1][y], x + 1, y), (target[x][y - 1], x, y - 1),
+                           (target[x][y + 1], x, y + 1)])
+        else:
+            break
 
 
 def generate(sx, sy, target, stop, bias):
