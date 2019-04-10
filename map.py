@@ -7,11 +7,12 @@ TOP_LEVEL = 100
 WATER_LEVEL = 5
 TREE_LEVEL = 30
 REDUCTION_RATE = 90
-TREE_PERCENTAGE = 15
-RIVERS = 10
-RIVER_LEVEL = 20
+TREE_PERCENTAGE = 10
+RIVERS = 20
+RIVER_LEVEL = 10
 LANDMARKS = 100
-VISION_RADIUS = 4
+MASK = [[-1,-1,1,1,1,-1,-1], [-1,1,1,1,1,1,-1], [1,1,1,1,1,1,1], [1,1,1,1,1,1,1], [1,1,1,1,1,1,1], [-1,1,1,1,1,1,-1], [-1,-1,1,1,1,-1,-1]]
+VISION_RADIUS = len(MASK)
 
 class Map:
     def __init__(self):
@@ -40,7 +41,7 @@ class Map:
         print('Let there be rivers')
         for _ in range(RIVERS):
             x, y = self.find_water_point()
-            upwards(x, y, self.board, RIVER_LEVEL)
+            upwards(x, y, self.board, random.randrange(RIVER_LEVEL, TREE_LEVEL))
             print("And there were rivers... after %.2f seconds." % (time.time() - start))
 
     def add_landmarks(self):
@@ -57,10 +58,29 @@ class Map:
         for i in range(player_count):
             x, y = self.find_elevation_point(WATER_LEVEL * 2)
             while self.trees[x][y] != 0 or self.board[x][y] > TREE_LEVEL or self.min_dist(self.players, x,
-                                                                                           y) < 30 * VISION_RADIUS:
+                                                                                           y) < SIZE / VISION_RADIUS:
                 x, y = self.find_elevation_point(WATER_LEVEL * 2)
             print("Let there be player ", i + 1, self.board[x][y])
             self.players.append((x, y))
+
+    def get_vision(self, x, y):        
+        vision = MASK.copy()        
+        x1 = x - int(VISION_RADIUS / 2)
+        y1 = y - int(VISION_RADIUS / 2)
+        for i in range(VISION_RADIUS):
+            for j in range(VISION_RADIUS):
+                v = self.board[x1+i][y1+j]
+                t = self.trees[x1+i][y1+j]                
+                if MASK[i][j] == -1:
+                    vision[i][j] = -1
+                elif (x1+i,y1+j) in self.landmarks:
+                    vision[i][j] = TOP_LEVEL + self.landmarks.index((x1+i,y1+j))
+                elif v < self.water_level():
+                    vision[i][j] = 1
+                elif t > self.tree_level():
+                    vision[i][j] =  2
+                else:
+                    vision[i][j] = 0
 
     def min_dist(self, arr, x, y):
         if len(arr) == 0:

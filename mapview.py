@@ -2,24 +2,25 @@ from PIL import Image
 
 
 class MapView:
-    def __init__(self, map):
+    def __init__(self, map, players):
         self.map = map
+        self.players = players
 
     def save(self):
         image = Image.new("RGB", (self.map.size(), self.map.size()))
         for x in range(0, self.map.size()):
             for y in range(0, self.map.size()):
                 image.putpixel((x, y), self.color(x, y).get_tuple())
-        for (x, y) in self.map.players:
-            image.putpixel((x+1, y-1), Color(0, 0, 0).get_tuple())
-            image.putpixel((x+1, y), Color(0, 0, 0).get_tuple())
-            image.putpixel((x+1, y+1), Color(0, 0, 0).get_tuple())
-            image.putpixel((x, y-1), Color(0, 0, 0).get_tuple())
-            image.putpixel((x, y), Color(0, 0, 0).get_tuple())
-            image.putpixel((x, y+1), Color(0, 0, 0).get_tuple())
-            image.putpixel((x-1, y-1), Color(0, 0, 0).get_tuple())
-            image.putpixel((x-1, y), Color(0, 0, 0).get_tuple())
-            image.putpixel((x-1, y+1), Color(0, 0, 0).get_tuple())
+        for player in self.players:
+            image.putpixel((player.x+1, player.y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x+1, player.y), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x+1, player.y+1), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x, player.y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x, player.y), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x, player.y+1), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x-1, player.y-1), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x-1, player.y), Color(0, 0, 0).get_tuple())
+            image.putpixel((player.x-1, player.y+1), Color(0, 0, 0).get_tuple())
         for (x, y) in self.map.landmarks:
             image.putpixel((x + 1, y + 1), Color(255, 0, 0).get_tuple())
             image.putpixel((x + 1, y), Color(255, 0, 0).get_tuple())
