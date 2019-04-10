@@ -10,5 +10,5 @@ class Game:
     def step(self):
         for player in self.players:
             vision = self.map.get_vision(player.x, player.y)
-            direction = player.move(vision)
+            direction = player.move(vision)            
             player.update_position(direction)

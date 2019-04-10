@@ -14,4 +14,4 @@ class Player:
 
     def update_position(self, dir):
         self.x += DIRS[dir][0]
-        self.y += DIRS[dir][1]
+        self.y += DIRS[dir][1]        
