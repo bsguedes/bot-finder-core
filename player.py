@@ -12,6 +12,6 @@ class Player:
     def move(self, vision):
         return random.randint(0, 3)
 
-    def update_position(self, dir):
-        self.x += DIRS[dir][0]
-        self.y += DIRS[dir][1]        
+    def update_position(self, direction):
+        self.x += DIRS[direction][0]
+        self.y += DIRS[direction][1]

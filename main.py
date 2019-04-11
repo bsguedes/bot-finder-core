@@ -1,5 +1,4 @@
 from map import Map
-from mapview import MapView
 from game import Game
 from mapcanvas import MapCanvas
 import time
