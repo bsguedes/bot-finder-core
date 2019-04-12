@@ -81,12 +81,14 @@ class Map:
         vision = [[-1] * d for y in range(d)]
         x1 = x - VISION_RADIUS
         y1 = y - VISION_RADIUS
+        landmarks = []
         for i in range(d):
             for j in range(d):
                 if (i - VISION_RADIUS)**2 + (j - VISION_RADIUS)**2 - VISION_RADIUS**2 <= 4:
                     v = self.board[x1+i][y1+j]
                     t = self.trees[x1+i][y1+j]
                     if (x1 + i, y1 + j) in self.landmarks:
+                        landmarks.append(self.landmarks.index((x1 + i, y1 + j)))
                         vision[i][j] = TOP_LEVEL + self.landmarks.index((x1 + i, y1 + j))
                     elif v < self.water_level:
                         vision[i][j] = 1
@@ -94,7 +96,7 @@ class Map:
                         vision[i][j] = 2
                     else:
                         vision[i][j] = 0
-        return vision
+        return vision, landmarks
 
     def find_water_point(self):
         while True:

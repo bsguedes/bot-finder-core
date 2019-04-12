@@ -24,6 +24,7 @@ class MapCanvas:
         score = game.score
         target = game.target
         turns = game.turns
+        landmarks = len([x for x in game.landmarks if x])
         for item in self.temporary_objects:
             self.canvas.delete(item)
         self.temporary_objects.clear()
@@ -47,6 +48,9 @@ class MapCanvas:
         r, t = self.create_label_with_rectangle(320, self.map.size - 25, 130, 'Turns: %i' % turns)
         self.temporary_objects.append(r)
         self.temporary_objects.append(t)
+        r, t = self.create_label_with_rectangle(480, self.map.size - 25, 130, 'Landmarks: %i' % landmarks)
+        self.temporary_objects.append(r)
+        self.temporary_objects.append(t)
         self.window.update_idletasks()
         self.window.update()
 
@@ -63,7 +67,7 @@ class MapCanvas:
         return a, b
 
     def won(self):
-        self.create_label_with_rectangle(480, self.map.size - 25, 130, 'YOU WIN!')
+        self.create_label_with_rectangle(640, self.map.size - 25, 130, '   YOU WIN!')
         mainloop()
 
     def color(self, x, y, fog=False):

@@ -1,4 +1,5 @@
 from player import Player
+from thread import ThreadWithReturnValue
 
 
 class Game:
@@ -8,6 +9,7 @@ class Game:
         self.score = 0
         self.turns = 0
         self.target = (2 * self.map.vision_radius + 1) ** 2
+        self.landmarks = [False for _ in terrain.landmarks]
         i = 0
         for player in terrain.players:
             i += 1
@@ -15,11 +17,25 @@ class Game:
 
     def step(self):
         self.turns += 1
+        threads = []
         for player in self.players:
-            vision = self.map.get_vision(player.x, player.y)
-            direction = player.move(vision)
-            if self.map.is_valid_move(player.x, player.y, direction):
-                player.update_position(direction)
+            vision, landmarks = self.map.get_vision(player.x, player.y)
+            for landmark in landmarks:
+                self.landmarks[landmark] = True
+            threads.append(ThreadWithReturnValue(target=threaded_function, args=(player, vision)))
+
+        for thread in threads:
+            thread.start()
+
+        results = [0 for _ in range(len(self.players))]
+        for index, thread in enumerate(threads):
+            results[index] = thread.join()
+
+        i = 0
+        for player in self.players:
+            if self.map.is_valid_move(player.x, player.y, results[i]):
+                player.update_position(results[i])
+                i += 1
 
     def finished(self):
         c = len(self.players)
@@ -31,3 +47,7 @@ class Game:
                 dists.append((p1.x - p2.x) ** 2 + (p1.y - p2.y)**2)
         self.score = max(dists)
         return self.score <= self.target
+
+
+def threaded_function(player, vision):
+    return player.move(vision)
