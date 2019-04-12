@@ -29,9 +29,10 @@ class MapCanvas:
         self.temporary_objects.clear()
         for player in players:
             self.temporary_objects.append(self.create_circle(player.x, player.y, 2))
-            r, t = self.create_label_with_rectangle(player.x, player.y, 60, player.name)
-            self.temporary_objects.append(r)
-            self.temporary_objects.append(t)
+            if score > 100 * target:
+                r, t = self.create_label_with_rectangle(player.x, player.y, 60, player.name)
+                self.temporary_objects.append(r)
+                self.temporary_objects.append(t)
             for x in range(0, self.map.vision_radius * 2 + 1):
                 for y in range(0, self.map.vision_radius * 2 + 1):
                     a, b = player.x - self.map.vision_radius + x, player.y - self.map.vision_radius + y
