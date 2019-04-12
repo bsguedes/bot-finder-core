@@ -1,11 +1,11 @@
-from tkinter import Tk, Canvas, PhotoImage
+from tkinter import Tk, Canvas, PhotoImage, W, mainloop
 
 
 class MapCanvas:
     def __init__(self, terrain):
         self.map = terrain
         self.window = Tk()        
-        self.player_objects = []
+        self.temporary_objects = []
         self.canvas = Canvas(self.window, width=terrain.size, height=terrain.size, bg="#000000")
         self.canvas.pack()
         self.img = PhotoImage(width=terrain.size, height=terrain.size)
@@ -19,17 +19,33 @@ class MapCanvas:
         for (x, y) in self.map.landmarks:
             self.canvas.create_rectangle(x, y, x+1, y+1, outline="#ff0000")
        
-    def show(self, players):
-        for item in self.player_objects:
+    def show(self, game):
+        players = game.players
+        score = game.score
+        target = game.target
+        turns = game.turns
+        for item in self.temporary_objects:
             self.canvas.delete(item)
-        self.player_objects.clear()
+        self.temporary_objects.clear()
         for player in players:
-            self.player_objects.append(self.create_circle(player.x, player.y, 2))
+            self.temporary_objects.append(self.create_circle(player.x, player.y, 2))
+            r, t = self.create_label_with_rectangle(player.x, player.y, 60, player.name)
+            self.temporary_objects.append(r)
+            self.temporary_objects.append(t)
             for x in range(0, self.map.vision_radius * 2 + 1):
                 for y in range(0, self.map.vision_radius * 2 + 1):
                     a, b = player.x - self.map.vision_radius + x, player.y - self.map.vision_radius + y
                     if player.vision[x][y] != -1:
                         self.img.put(self.color(a, b, fog=False), (a, b))
+        r, t = self.create_label_with_rectangle(0, self.map.size - 25, 130, 'Score: %i' % score)
+        self.temporary_objects.append(r)
+        self.temporary_objects.append(t)
+        r, t = self.create_label_with_rectangle(160, self.map.size - 25, 130, 'Target: %i' % target)
+        self.temporary_objects.append(r)
+        self.temporary_objects.append(t)
+        r, t = self.create_label_with_rectangle(320, self.map.size - 25, 130, 'Turns: %i' % turns)
+        self.temporary_objects.append(r)
+        self.temporary_objects.append(t)
         self.window.update_idletasks()
         self.window.update()
 
@@ -39,6 +55,15 @@ class MapCanvas:
         x1 = x + r
         y1 = y + r
         return self.canvas.create_oval(x0, y0, x1, y1, fill=fill)
+
+    def create_label_with_rectangle(self, x, y, w, name):
+        a = self.canvas.create_rectangle(x + 5, y + 5, x + w, y + 25, fill="white")
+        b = self.canvas.create_text(x+8, y+14, text=name, anchor=W)
+        return a, b
+
+    def won(self):
+        self.create_label_with_rectangle(480, self.map.size - 25, 130, 'YOU WIN!')
+        mainloop()
 
     def color(self, x, y, fog=False):
         v, t = self.map.board[x][y], self.map.trees[x][y]

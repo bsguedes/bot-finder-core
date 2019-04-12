@@ -11,7 +11,8 @@ m.add_landmarks()
 m.add_players(4)
 g = Game(m)
 v = MapCanvas(m)
-while True:
+while not g.finished():
     g.step()
     time.sleep(0.02)
-    v.show(g.players)
+    v.show(g)
+v.won()

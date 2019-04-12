@@ -8,12 +8,12 @@ TOP_LEVEL = 100
 WATER_LEVEL = 5
 TREE_LEVEL = 30
 REDUCTION_RATE = 90
-TREE_PERCENTAGE = 10
+TREE_PERCENTAGE = 15
 RIVERS = 20
 RIVER_LEVEL = 10
 LANDMARKS = 100
 VISION_RADIUS = 4
-SEED = 1337
+SEED = 13338
 
 
 class Map:
@@ -66,7 +66,7 @@ class Map:
         for i in range(player_count):
             x, y = self.find_elevation_point(WATER_LEVEL * 2)
             while self.trees[x][y] != 0 or self.board[x][y] > TREE_LEVEL or self.min_dist(self.players, x,
-                                                                                          y) < SIZE / VISION_RADIUS:
+                                                                                          y) < SIZE / 5:
                 x, y = self.find_elevation_point(WATER_LEVEL * 2)
             print("Let there be player ", i + 1, self.board[x][y])
             self.players.append((x, y))
