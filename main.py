@@ -13,5 +13,5 @@ g = Game(m)
 v = MapCanvas(m)
 while True:
     g.step()
-    time.sleep(0.1)
+    time.sleep(0.02)
     v.show(g.players)

@@ -12,14 +12,7 @@ TREE_PERCENTAGE = 10
 RIVERS = 20
 RIVER_LEVEL = 10
 LANDMARKS = 100
-MASK = [[-1, -1, 1, 1, 1, -1, -1],
-        [-1, 1, 1, 1, 1, 1, -1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [-1, 1, 1, 1, 1, 1, -1],
-        [-1, -1, 1, 1, 1, -1, -1]]
-VISION_RADIUS = len(MASK)
+VISION_RADIUS = 10
 
 
 class Map:
@@ -28,6 +21,11 @@ class Map:
         self.trees = [[0] * SIZE for _ in range(SIZE)]
         self.players = []
         self.landmarks = []
+        self.size = SIZE
+        self.top_level = TOP_LEVEL
+        self.tree_level = TREE_LEVEL
+        self.water_level = WATER_LEVEL
+        self.vision_radius = VISION_RADIUS
 
     def add_land(self):
         start = time.time()
@@ -76,24 +74,26 @@ class Map:
         y += DIRS[direction][1]
         return not self.trees[x][y] and not (x, y) in self.landmarks and self.board[x][y] > WATER_LEVEL
 
-    def get_vision(self, x, y):        
-        vision = MASK.copy()        
-        x1 = x - int(VISION_RADIUS / 2)
-        y1 = y - int(VISION_RADIUS / 2)
-        for i in range(VISION_RADIUS):
-            for j in range(VISION_RADIUS):
-                v = self.board[x1+i][y1+j]
-                t = self.trees[x1+i][y1+j]                
-                if MASK[i][j] == -1:
-                    vision[i][j] = -1
-                elif (x1 + i, y1 + j) in self.landmarks:
-                    vision[i][j] = TOP_LEVEL + self.landmarks.index((x1 + i, y1 + j))
-                elif v < self.water_level():
-                    vision[i][j] = 1
-                elif t > self.tree_level():
-                    vision[i][j] = 2
-                else:
-                    vision[i][j] = 0
+    def get_vision(self, x, y):
+        d = (VISION_RADIUS * 2) + 1
+        vision = [[-1] * d for y in range(d)]
+        x1 = x - VISION_RADIUS
+        y1 = y - VISION_RADIUS
+        for i in range(d):
+            for j in range(d):
+                if (i - VISION_RADIUS)**2 + (j - VISION_RADIUS)**2 - VISION_RADIUS**2 <= 4:
+                    v = self.board[x1+i][y1+j]
+                    t = self.trees[x1+i][y1+j]
+                    if (x1 + i, y1 + j) in self.landmarks:
+                        vision[i][j] = TOP_LEVEL + self.landmarks.index((x1 + i, y1 + j))
+                    elif v < self.water_level:
+                        vision[i][j] = 1
+                    elif t > self.tree_level:
+                        vision[i][j] = 2
+                    else:
+                        vision[i][j] = 0
+        print(vision)
+        return vision
 
     def find_water_point(self):
         while True:
@@ -129,18 +129,6 @@ class Map:
         if len(arr) == 0:
             return SIZE
         return min([sqrt((p[0] - x)**2 + (p[1] - y)**2) for p in arr])
-
-    def size(self):
-        return SIZE
-
-    def water_level(self):
-        return WATER_LEVEL
-
-    def tree_level(self):
-        return TREE_LEVEL
-
-    def top_level(self):
-        return TOP_LEVEL
 
 
 def red(v):
