@@ -12,11 +12,13 @@ TREE_PERCENTAGE = 10
 RIVERS = 20
 RIVER_LEVEL = 10
 LANDMARKS = 100
-VISION_RADIUS = 10
+VISION_RADIUS = 4
+SEED = 1337
 
 
 class Map:
     def __init__(self):
+        random.seed(SEED)
         self.board = [[0] * SIZE for _ in range(SIZE)]
         self.trees = [[0] * SIZE for _ in range(SIZE)]
         self.players = []
@@ -92,7 +94,6 @@ class Map:
                         vision[i][j] = 2
                     else:
                         vision[i][j] = 0
-        print(vision)
         return vision
 
     def find_water_point(self):
