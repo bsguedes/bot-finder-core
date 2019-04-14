@@ -8,7 +8,7 @@ m.add_land()
 m.add_trees()
 m.add_rivers()
 m.add_landmarks()
-m.add_players(4)
+m.add_players(6)
 g = Game(m)
 v = MapCanvas(m)
 while not g.finished():

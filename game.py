@@ -7,6 +7,7 @@ class Game:
         self.map = terrain
         self.players = []
         self.score = 0
+        self.minimum_score = terrain.size ** 3
         self.turns = 0
         self.target = (2 * self.map.vision_radius + 1) ** 2
         self.landmarks = [False for _ in terrain.landmarks]
@@ -46,6 +47,7 @@ class Game:
                 p2 = self.players[j]
                 dists.append((p1.x - p2.x) ** 2 + (p1.y - p2.y)**2)
         self.score = max(dists)
+        self.minimum_score = min(self.score, self.minimum_score)
         return self.score <= self.target
 
 
