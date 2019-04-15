@@ -1,9 +1,10 @@
 from player import Player
 from thread import ThreadWithReturnValue
+from threading import Lock, Thread
 
 
 class Game:
-    def __init__(self, terrain):
+    def __init__(self, terrain, updater):
         self.map = terrain
         self.players = []
         self.score = 0
@@ -11,6 +12,7 @@ class Game:
         self.turns = 0
         self.target = (2 * self.map.vision_radius + 1) ** 2
         self.landmarks = [False for _ in terrain.landmarks]
+        self.updater = updater
         i = 0
         for player in terrain.players:
             i += 1
@@ -50,6 +52,40 @@ class Game:
         self.minimum_score = min(self.score, self.minimum_score)
         return self.score <= self.target
 
+    def step(self, player):
+        map_lock.acquire()
+        vision, landmarks = self.map.get_vision(player.x, player.y)
+        for landmark in landmarks:
+            self.landmarks[landmark] = True
+        map_lock.release()
+        thread = Thread(target=threaded_function, args=(player, vision, self.updater, self))
+        thread.start()
 
-def threaded_function(player, vision):
-    return player.move(vision)
+    def play(self):
+
+
+        while not g.finished():
+            g.step()
+            time.sleep(0.02)
+            v.show(g)
+
+
+map_lock = Lock()
+done_lock = Lock()
+
+
+def threaded_function(player, vision, canvas_callback, game):
+    direction = player.move(vision)
+    if game.map.is_valid_move(player.x, player.y, direction):
+        player.update_position(direction)
+    map_lock.acquire()
+    canvas_callback()
+    if not game.finished():
+        map_lock.release()
+        thread = Thread(target=threaded_function, args=(player, vision, canvas_callback, game))
+        thread.start()
+    else:
+        done_lock.acquire()
+        map_lock.release()
+
+
