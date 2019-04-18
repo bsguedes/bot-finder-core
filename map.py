@@ -13,12 +13,17 @@ RIVERS = 20
 RIVER_LEVEL = 10
 LANDMARKS = 100
 VISION_RADIUS = 4
-SEED = 13338
+SEED = None
 
 
 class Map:
     def __init__(self):
-        random.seed(SEED)
+        seed = SEED
+        if seed is None:
+            seed = random.randint()
+        random.seed(seed)
+        print('Using seed ', seed)
+
         self.board = [[0] * SIZE for _ in range(SIZE)]
         self.trees = [[0] * SIZE for _ in range(SIZE)]
         self.players = []
