@@ -8,15 +8,14 @@ class Player:
         self.player_id = pid - 1
         self.x = x
         self.y = y
-        self.ip = ip
-        self.port = port
+        self.base_url = 'http://%s:%s' % (ip, port)
         self.vision = None
         self.steps = 0
         self.name = self.obtain_name(name)
 
     def obtain_name(self, default_name):
         try:
-            r = requests.get('http://%s:%s/player/name' % (self.ip, self.port))
+            r = requests.get('%s/players/name' % self.base_url)
             return r.content['name']
         except RequestException as e:
             if config.VERBOSE:
@@ -26,7 +25,8 @@ class Player:
     def move(self, vision):
         self.vision = vision
         try:
-            r = requests.put('http://%s:%s/player/move' % (self.ip, self.port), data=payload(vision))
+            print(payload(vision))
+            r = requests.put('%s/players/%s/move' % (self.base_url, self.name), data=payload(vision))
             direction = parse_response(r.content['direction'])
         except RequestException as e:
             if config.VERBOSE:
@@ -37,7 +37,7 @@ class Player:
 
     def obtain_radio(self):
         try:
-            r = requests.get('http://%s:%s/player/radio' % (self.ip, self.port))
+            r = requests.get('%s/players/%s/radio' % (self.base_url, self.name))
             return r.content['radio']
         except RequestException as e:
             if config.VERBOSE:
@@ -46,7 +46,7 @@ class Player:
 
     def post_radio(self, radio_stream):
         try:
-            requests.post('http://%s:%s/player/radio' % (self.ip, self.port), data=radio_stream)
+            requests.post('%s/players/%s/radio' % (self.base_url, self.name), data=radio_stream)
         except RequestException as e:
             if config.VERBOSE:
                 print(e)

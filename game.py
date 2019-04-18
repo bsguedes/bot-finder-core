@@ -2,6 +2,7 @@ from player import Player
 from threading import Lock, Thread
 from queue import Queue
 import time
+import config
 
 
 class Game:
@@ -57,7 +58,7 @@ class Game:
             callback(game, player)
 
     def turn_radio(self):
-        thread = Thread(target=play_radio, args=(self, self.players, 10))
+        thread = Thread(target=play_radio, args=(self, self.players, config.RADIO_INTERVAL))
         thread.start()
 
 
@@ -94,7 +95,7 @@ def send_radio_thread(player, radio_stream):
 
 
 def threaded_function(player, vision, canvas_callback, game):
-    time.sleep(0.05)
+    time.sleep(config.PLAYER_INTERVAL)
     direction = player.move(vision)
     if game.map.is_valid_move(player.x, player.y, direction):
         player.update_position(direction)
