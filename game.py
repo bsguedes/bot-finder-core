@@ -1,5 +1,7 @@
 from player import Player
-from thread import ThreadWithReturnValue
+from threading import Lock, Thread
+from queue import Queue
+import time
 
 
 class Game:
@@ -11,32 +13,13 @@ class Game:
         self.turns = 0
         self.target = (2 * self.map.vision_radius + 1) ** 2
         self.landmarks = [False for _ in terrain.landmarks]
+        self.updater = None
+        self.completed = False
+        self.callback_queue = Queue()
         i = 0
         for player in terrain.players:
             i += 1
-            self.players.append(Player("player %s" % i, player[0], player[1]))
-
-    def step(self):
-        self.turns += 1
-        threads = []
-        for player in self.players:
-            vision, landmarks = self.map.get_vision(player.x, player.y)
-            for landmark in landmarks:
-                self.landmarks[landmark] = True
-            threads.append(ThreadWithReturnValue(target=threaded_function, args=(player, vision)))
-
-        for thread in threads:
-            thread.start()
-
-        results = [0 for _ in range(len(self.players))]
-        for index, thread in enumerate(threads):
-            results[index] = thread.join()
-
-        i = 0
-        for player in self.players:
-            if self.map.is_valid_move(player.x, player.y, results[i]):
-                player.update_position(results[i])
-                i += 1
+            self.players.append(Player("player %s" % i, i, player[0], player[1]))
 
     def finished(self):
         c = len(self.players)
@@ -50,6 +33,40 @@ class Game:
         self.minimum_score = min(self.score, self.minimum_score)
         return self.score <= self.target
 
+    def player_step(self, player):
+        if not self.completed:
+            map_lock.acquire()
+            vision, landmarks = self.map.get_vision(player.x, player.y)
+            for landmark in landmarks:
+                self.landmarks[landmark] = True
+            map_lock.release()
+            thread = Thread(target=threaded_function, args=(player, vision, self.updater, self))
+            thread.start()
 
-def threaded_function(player, vision):
-    return player.move(vision)
+    def play(self, cb):
+        self.updater = cb
+        for player in self.players:
+            self.player_step(player)
+        while not self.completed:
+            callback, game, player = self.callback_queue.get()
+            callback(game, player)
+
+
+map_lock = Lock()
+
+
+def threaded_function(player, vision, canvas_callback, game):
+    time.sleep(0.02)
+    direction = player.move(vision)
+    if game.map.is_valid_move(player.x, player.y, direction):
+        player.update_position(direction)
+    map_lock.acquire()
+    game.callback_queue.put((canvas_callback, game, player))
+    if not game.finished():
+        map_lock.release()
+        game.player_step(player)
+    else:
+        game.completed = True
+        map_lock.release()
+
+

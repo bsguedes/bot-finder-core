@@ -4,12 +4,14 @@ DIRS = {0: (1, 0), 1: (0, 1), 2: (-1, 0), 3: (0, -1)}
 
 
 class Player:    
-    def __init__(self, name, x, y):
+    def __init__(self, name, pid, x, y):
         self.name = name
+        self.player_id = pid - 1
         self.x = x
         self.y = y
         self.vision = None
         self.prev_dir = None
+        self.steps = 0
 
     def move(self, vision):
         self.vision = vision
@@ -20,6 +22,7 @@ class Player:
         else:
             direction = self.prev_dir
         self.prev_dir = direction
+        self.steps += 1
         return direction
 
     def update_position(self, direction):
