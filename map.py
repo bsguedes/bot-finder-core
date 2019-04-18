@@ -20,7 +20,7 @@ class Map:
     def __init__(self):
         seed = SEED
         if seed is None:
-            seed = random.randint()
+            seed = random.randint(0, 65536)
         random.seed(seed)
         print('Using seed ', seed)
 
