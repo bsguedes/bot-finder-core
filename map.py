@@ -57,7 +57,7 @@ class Map:
         print('Let there be landmarks')
         for i in range(LANDMARKS):
             x, y = self.find_elevation_point(WATER_LEVEL)
-            while self.trees[x][y] != 0 or self.min_dist(self.landmarks, x, y) < 2 * VISION_RADIUS:
+            while self.trees[x][y] != 0 or min_dist(self.landmarks, x, y) < 2 * VISION_RADIUS:
                 x, y = self.find_elevation_point(WATER_LEVEL)
             self.landmarks.append((x, y))
         print("And there were landmarks... after %.2f seconds." % (time.time() - start))
@@ -65,8 +65,7 @@ class Map:
     def add_players(self, player_count):
         for i in range(player_count):
             x, y = self.find_elevation_point(WATER_LEVEL * 2)
-            while self.trees[x][y] != 0 or self.board[x][y] > TREE_LEVEL or self.min_dist(self.players, x,
-                                                                                          y) < SIZE / 5:
+            while self.trees[x][y] != 0 or self.board[x][y] > TREE_LEVEL or min_dist(self.players, x, y) < SIZE / 5:
                 x, y = self.find_elevation_point(WATER_LEVEL * 2)
             print("Let there be player ", i + 1, self.board[x][y])
             self.players.append((x, y))
@@ -128,10 +127,11 @@ class Map:
                     tree += 1
         return tree
 
-    def min_dist(self, arr, x, y):
-        if len(arr) == 0:
-            return SIZE
-        return min([sqrt((p[0] - x)**2 + (p[1] - y)**2) for p in arr])
+
+def min_dist(arr, x, y):
+    if len(arr) == 0:
+        return SIZE
+    return min([sqrt((p[0] - x)**2 + (p[1] - y)**2) for p in arr])
 
 
 def red(v):
