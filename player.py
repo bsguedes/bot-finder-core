@@ -25,7 +25,6 @@ class Player:
     def move(self, vision):
         self.vision = vision
         try:
-            print(payload(vision))
             r = requests.put('%s/players/%s/move' % (self.base_url, self.name), data=payload(vision))
             direction = parse_response(r.content['direction'])
         except RequestException as e:
