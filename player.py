@@ -25,7 +25,7 @@ class Player:
     def move(self, vision):
         self.vision = vision
         try:
-            r = requests.put('%s/players/%s/move' % (self.base_url, self.name), data=payload(vision))
+            r = requests.put('%s/players/%s/move' % (self.base_url, self.name), json=payload(vision))
             direction = parse_response(r.content['direction'])
         except RequestException as e:
             if config.VERBOSE:
@@ -45,7 +45,7 @@ class Player:
 
     def post_radio(self, radio_stream):
         try:
-            requests.post('%s/players/%s/radio' % (self.base_url, self.name), data=radio_stream)
+            requests.post('%s/players/%s/radio' % (self.base_url, self.name), json=radio_stream)
         except RequestException as e:
             if config.VERBOSE:
                 print(e)
@@ -63,6 +63,7 @@ def payload(vision):
 
 
 def parse_response(content):
+    content = content.lower()
     if content == 'east':
         return 0
     elif content == 'north':
