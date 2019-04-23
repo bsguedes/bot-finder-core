@@ -33,6 +33,7 @@ class MapCanvas:
         for item in self.player_objects[player.name]:
             self.canvas.delete(item)
         self.objects.clear()
+        self.player_objects[player.name].clear()
 
         # player icon and label
         self.player_objects[player.name].append(self.create_circle(player.x, player.y, 2))
