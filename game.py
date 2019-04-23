@@ -76,6 +76,8 @@ def play_radio(game, players, sleep_time):
         for index, thread in enumerate(get_threads):
             radio, name = thread.join()
             results[name] = radio
+        print('Will send radio to all players.')
+        print('Radio content: ', results)
         send_threads = []
         for player in players:
             send_threads.append(Thread(target=send_radio_thread, args=(player, results)))
