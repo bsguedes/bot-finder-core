@@ -37,8 +37,8 @@ class MapCanvas:
         # player icon and label
         self.player_objects[player.name].append(self.create_circle(player.x, player.y, 2))
         if score > 100 * target:
-            self.create_label_with_rectangle(player.x, player.y, 60, player.name, self.player_objects[player.name])
-        self.create_label_with_rectangle(0, self.map.size - 180 + 25 * player.player_id, 150,
+            self.create_label_with_rectangle(player.x, player.y, 80, player.name, self.player_objects[player.name])
+        self.create_label_with_rectangle(0, self.map.size - 180 + 25 * player.player_id, 170,
                                          '%s: %s moves' % (player.name, player.steps),
                                          self.player_objects[player.name])
 

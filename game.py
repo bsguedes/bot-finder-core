@@ -25,6 +25,7 @@ class Game:
             x = coord[0]
             y = coord[1]
             self.players.append(Player("player %s" % i, i, x, y, ip, port))
+        self.player_time = {p.name: [] for p in self.players}
 
     def finished(self):
         c = len(self.players)
@@ -56,6 +57,9 @@ class Game:
         while not self.completed:
             callback, game, player = self.callback_queue.get()
             callback(game, player)
+
+    def report_time(self, player, move_time):
+        self.player_time[player.name].append(move_time)
 
     def turn_radio(self):
         thread = Thread(target=play_radio, args=(self, self.players, config.RADIO_INTERVAL))
@@ -98,7 +102,9 @@ def send_radio_thread(player, radio_stream):
 
 def threaded_function(player, vision, canvas_callback, game):
     time.sleep(config.PLAYER_INTERVAL)
+    move_start = time.time()
     direction = player.move(vision)
+    game.report_time(player, time.time() - move_start)
     if game.map.is_valid_move(player.x, player.y, direction):
         player.update_position(direction)
     map_lock.acquire()

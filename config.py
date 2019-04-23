@@ -1,6 +1,8 @@
 PLAYERS = [
     ('127.0.0.1', 3000),
-    ('127.0.0.1', 3001)
+    ('127.0.0.1', 3001),
+    ('127.0.0.1', 3002),
+    ('127.0.0.1', 3003)
 ]
 
 DIRS = {0: (1,  0),  1: (0,  1),  2: (-1,  0),  3: (0,  -1)}
@@ -18,4 +20,4 @@ VISION_RADIUS = 4
 SEED = None
 VERBOSE = False
 RADIO_INTERVAL = 10
-PLAYER_INTERVAL = 0.02
+PLAYER_INTERVAL = 0.05
