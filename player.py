@@ -16,7 +16,7 @@ class Player:
     def obtain_name(self, default_name):
         try:
             r = requests.get('%s/players/name' % self.base_url)
-            return r.content['name']
+            return r.json()['name']
         except RequestException as e:
             if config.VERBOSE:
                 print(e)
@@ -26,7 +26,7 @@ class Player:
         self.vision = vision
         try:
             r = requests.put('%s/players/%s/move' % (self.base_url, self.name), json=payload(vision))
-            direction = parse_response(r.content['direction'])
+            direction = parse_response(r.json()['direction'])
         except RequestException as e:
             if config.VERBOSE:
                 print(e)
@@ -37,7 +37,7 @@ class Player:
     def obtain_radio(self):
         try:
             r = requests.get('%s/players/%s/radio' % (self.base_url, self.name))
-            return r.content['radio']
+            return r.json()['radio']
         except RequestException as e:
             if config.VERBOSE:
                 print(e)
