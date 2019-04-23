@@ -24,7 +24,7 @@ Each bot has to expose a REST API with the following endpoints:
 
 Expects a JSON (application/json) containing the name of the player. Every time this is called, a new game begins.
 
-It is expected that the API returns this:
+It is expected that the API returns this payload:
 
 ```
 { 'name': 'bot_name' } 
@@ -34,7 +34,7 @@ Please keep the name down to 8 characters.
 
 ### PUT /players/:player_name/move
 
-A body is passed in this call:
+The API puts this payload in this call:
 
 ```
 { 'vision': (VisionObject) }
@@ -54,7 +54,7 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 
 Expects a JSON (application/json) containing data that will be sent to all players, under a `radio` key.
 
-It is expected that the API returns this:
+It is expected that the API returns this payload:
 
 ```
 { 'radio': (RadioObject) } 
@@ -64,7 +64,7 @@ Where `RadioObject` is a JSON object with whatever data you wish.
 
 ### POST /players/:player_name/radio
 
-The API posts to each player through this route the contents of every radio signal.
+The API posts to each player through this route the contents of every radio signal with the following payload:
 
 ```
 { 'player_1': (RadioObject), 'player_2': (RadioObject), ... } 
