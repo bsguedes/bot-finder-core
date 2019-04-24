@@ -1,4 +1,5 @@
 from tkinter import Tk, Canvas, PhotoImage, W, mainloop
+import config
 
 
 class MapCanvas:
@@ -37,11 +38,12 @@ class MapCanvas:
 
         # player icon and label
         self.player_objects[player.name].append(self.create_circle(player.x, player.y, 2))
-        if score > 100 * target:
+        if score > 5000:
             self.create_label_with_rectangle(player.x, player.y, 80, player.name, self.player_objects[player.name])
-        self.create_label_with_rectangle(0, self.map.size - 180 + 25 * player.player_id, 170,
-                                         '%s: %s moves' % (player.name, player.steps),
-                                         self.player_objects[player.name])
+        if config.SHOW_SCORES:
+            self.create_label_with_rectangle(0, self.map.size - 25 * (player.player_id + 2), 170,
+                                             '%s: %s moves' % (player.name, player.steps),
+                                             self.player_objects[player.name])
 
         # player vision
         for x in range(0, self.map.vision_radius * 2 + 1):
@@ -50,11 +52,12 @@ class MapCanvas:
                 if player.vision[x][y] != -1:
                     self.img.put(self.color(a, b, fog=False), (a, b))
 
-        # lower bar
-        self.create_label_with_rectangle(0, self.map.size - 25, 130, 'Score: %i' % score, self.objects)
-        self.create_label_with_rectangle(150, self.map.size - 25, 130, 'Best: %i' % game.minimum_score, self.objects)
-        self.create_label_with_rectangle(300, self.map.size - 25, 130, 'Target: %i' % target, self.objects)
-        self.create_label_with_rectangle(450, self.map.size - 25, 130, 'Landmarks: %i' % landmarks, self.objects)
+        # items
+        self.create_label_with_rectangle(0, 0, 130, 'Score: %i' % score, self.objects)
+        self.create_label_with_rectangle(0, self.map.size - 25, 130, 'Best: %i' % game.minimum_score, self.objects)
+        self.create_label_with_rectangle(self.map.size - 135, 0, 130, 'Target: %i' % target, self.objects)
+        self.create_label_with_rectangle(self.map.size - 135, self.map.size - 25, 130, 'Landmarks: %i' % landmarks,
+                                         self.objects)
 
         self.window.update_idletasks()
         self.window.update()
@@ -73,7 +76,8 @@ class MapCanvas:
         collection.append(b)
 
     def won(self):
-        self.create_label_with_rectangle(600, self.map.size - 25, 130, '   YOU WIN!', self.objects)
+        self.create_label_with_rectangle(self.map.size / 2 - 65, self.map.size / 2 - 65, 130, '   YOU WIN!',
+                                         self.objects)
         mainloop()
 
     def color(self, x, y, fog=False):

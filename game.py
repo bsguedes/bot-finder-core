@@ -80,8 +80,11 @@ def play_radio(game, players, sleep_time):
         for index, thread in enumerate(get_threads):
             radio, name = thread.join()
             results[name] = radio
+        print('-------------------------------------------------')
         print('Will send radio to all players.')
         print('Radio content: ', results)
+        print('Player time: ', {p: avg_time(x) for p, x in game.player_time.items()})
+        print('Player moves: ', {p.name: p.steps for p in players})
         send_threads = []
         for player in players:
             send_threads.append(Thread(target=send_radio_thread, args=(player, results)))
@@ -90,6 +93,13 @@ def play_radio(game, players, sleep_time):
         for thread in send_threads:
             thread.join()
         time.sleep(sleep_time)
+
+
+def avg_time(values):
+    s = sum(values)
+    c = len(values)
+    avg = 0 if c == 0 else s / c
+    return '%.2f ms' % (avg * 1000)
 
 
 def get_radio_thread(player, name):

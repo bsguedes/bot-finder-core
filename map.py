@@ -1,6 +1,6 @@
 import random
 import time
-from math import sqrt
+from math import sqrt, exp
 import config
 
 
@@ -24,7 +24,7 @@ class Map:
     def add_land(self):
         start = time.time()
         print('Let there be land')
-        generate(int(self.size / 2), int(self.size / 2), self.board, 0, generate_bias(0.999))
+        generate(int(self.size / 2), int(self.size / 2), self.board, 0, generate_bias(0.999), square=True)
         print("And there was land... after %.2f seconds." % (time.time() - start))
 
     def add_trees(self):
@@ -129,8 +129,10 @@ def min_dist(arr, x, y):
     return min([sqrt((p[0] - x)**2 + (p[1] - y)**2) for p in arr])
 
 
-def red(v):
-    return v * ((config.REDUCTION_RATE - 1) / config.REDUCTION_RATE + random.random() / config.REDUCTION_RATE)
+def descend(v, p):
+    factor = v - v * ((config.REDUCTION_RATE - 1) / config.REDUCTION_RATE + random.random() / config.REDUCTION_RATE)
+    factor = factor * p
+    return v - factor
 
 
 def generate_bias(minimum):
@@ -151,14 +153,14 @@ def upwards(x, y, target, level):
             break
 
 
-def generate(sx, sy, target, stop, bias):
+def generate(sx, sy, target, stop, bias, square=False):
     queue = set()
     queue.add((sx, sy, config.TOP_LEVEL))
     while len(queue) > 0:
         (x, y, l) = queue.pop()
         if not target[x][y] == 0:
             continue
-        target[x][y] = red(l)
+        target[x][y] = descend(l, phi(x, y, config.SIZE) if square else 1)
         if l > stop:
             if x > 0:
                 queue.add((x - 1, y, target[x][y] * bias[0]))
@@ -168,3 +170,10 @@ def generate(sx, sy, target, stop, bias):
                 queue.add((x, y - 1, target[x][y] * bias[2]))
             if y < config.SIZE - 1:
                 queue.add((x, y + 1, target[x][y] * bias[3]))
+
+
+def phi(x, y, size):
+    f = 0.25
+    x = x if x < size / 2 else size - x
+    y = y if y < size / 2 else size - y
+    return f if abs(x - y) < 5 else 1
