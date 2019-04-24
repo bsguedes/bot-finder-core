@@ -12,6 +12,7 @@ class Player:
         self.vision = None
         self.steps = 0
         self.name = self.obtain_name(name)
+        self.last_move_valid = None
 
     def obtain_name(self, default_name):
         try:
@@ -25,7 +26,8 @@ class Player:
     def move(self, vision):
         self.vision = vision
         try:
-            r = requests.put('%s/players/%s/move' % (self.base_url, self.name), json=payload(vision))
+            r = requests.put('%s/players/%s/move' % (self.base_url, self.name), json=payload(vision),
+                             headers={'Valid-Last-Move': str(self.last_move_valid)})
             direction = parse_response(r.json()['direction'])
         except RequestException as e:
             if config.VERBOSE:
@@ -50,10 +52,11 @@ class Player:
             if config.VERBOSE:
                 print(e)
 
-    def update_position(self, direction):
-        if direction >= 0:
+    def update_position(self, direction, valid_move):
+        if direction >= 0 and valid_move:
             self.x += config.DIRS[direction][0]
             self.y += config.DIRS[direction][1]
+        self.last_move_valid = valid_move
 
 
 def payload(vision):

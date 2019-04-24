@@ -10,7 +10,7 @@ class Game:
         self.map = terrain
         self.players = []
         self.score = 0
-        self.minimum_score = terrain.size ** 3
+        self.minimum_score = max(terrain.size_x, terrain.size_y) ** 3
         self.turns = 0
         self.target = (2 * self.map.vision_radius + 1) ** 2
         self.landmarks = [False for _ in terrain.landmarks]
@@ -115,8 +115,7 @@ def threaded_function(player, vision, canvas_callback, game):
     move_start = time.time()
     direction = player.move(vision)
     game.report_time(player, time.time() - move_start)
-    if game.map.is_valid_move(player.x, player.y, direction):
-        player.update_position(direction)
+    player.update_position(direction, game.map.is_valid_move(player.x, player.y, direction))
     map_lock.acquire()
     game.callback_queue.put((canvas_callback, game, player))
     if not game.finished():
