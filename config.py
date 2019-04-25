@@ -7,7 +7,7 @@ PLAYERS = [
 
 DIRS = {0: (1,  0),  1: (0,  1),  2: (-1,  0),  3: (0,  -1)}
 
-SELECTED_MAP = 'default'
+SELECTED_MAP = 'tiny'
 
 default_parameters = {
     'size_x': 900,
@@ -57,10 +57,27 @@ small_parameters = {
     'show_scores': False
 }
 
+tiny_parameters = {
+    'size_x': 250,
+    'size_y': 250,
+    'island_lower_level': 2,
+    'island_top_level': 3,
+    'water_level': 5,
+    'tree_level': 30,
+    'reduction_rate': 20,
+    'tree_percentage': 5,
+    'rivers': 5,
+    'river_level': 10,
+    'landmarks': 20,
+    'vision_radius': 10,
+    'show_scores': False
+}
+
 params = {
     'default': default_parameters,
     'small': small_parameters,
-    'large': large_parameters
+    'large': large_parameters,
+    'tiny': tiny_parameters
 }
 
 SIZE_X = params[SELECTED_MAP]['size_x']

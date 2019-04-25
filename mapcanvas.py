@@ -76,7 +76,7 @@ class MapCanvas:
         collection.append(b)
 
     def won(self):
-        self.create_label_with_rectangle(self.map.size_x / 2 - 65, self.map.size_y / 2 - 65, 130, '   YOU WIN!',
+        self.create_label_with_rectangle(self.map.size_x / 2 - 65, self.map.size_y / 2 - 15, 130, '   YOU WIN!',
                                          self.objects)
         mainloop()
 
