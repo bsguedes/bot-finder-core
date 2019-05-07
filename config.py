@@ -7,7 +7,7 @@ PLAYERS = [
 
 DIRS = {0: (1,  0),  1: (0,  1),  2: (-1,  0),  3: (0,  -1)}
 
-SELECTED_MAP = 'tiny'
+SELECTED_MAP = 'default'
 
 default_parameters = {
     'size_x': 900,
