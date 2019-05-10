@@ -7,7 +7,7 @@ PLAYERS = [
 
 DIRS = {0: (1,  0),  1: (0,  1),  2: (-1,  0),  3: (0,  -1)}
 
-SELECTED_MAP = 'default'
+SELECTED_MAP = 'small'
 
 default_parameters = {
     'size_x': 900,
@@ -23,6 +23,7 @@ default_parameters = {
     'landmarks': 100,
     'vision_radius': 4,
     'show_scores': True,
+    'zoom': 1
 }
 
 large_parameters = {
@@ -38,7 +39,8 @@ large_parameters = {
     'river_level': 1,
     'landmarks': 100,
     'vision_radius': 4,
-    'show_scores': True
+    'show_scores': True,
+    'zoom': 1
 }
 
 small_parameters = {
@@ -54,7 +56,8 @@ small_parameters = {
     'river_level': 10,
     'landmarks': 100,
     'vision_radius': 10,
-    'show_scores': False
+    'show_scores': False,
+    'zoom': 2
 }
 
 tiny_parameters = {
@@ -70,7 +73,8 @@ tiny_parameters = {
     'river_level': 10,
     'landmarks': 20,
     'vision_radius': 10,
-    'show_scores': False
+    'show_scores': False,
+    'zoom': 4
 }
 
 params = {
@@ -93,6 +97,7 @@ VISION_RADIUS = params[SELECTED_MAP]['vision_radius']
 SHOW_SCORES = params[SELECTED_MAP]['show_scores']
 ISLAND_TOP_LEVEL = params[SELECTED_MAP]['island_top_level']
 ISLAND_LOWER_LEVEL = params[SELECTED_MAP]['island_lower_level']
+ZOOM = params[SELECTED_MAP]['zoom']
 
 SEED = None
 VERBOSE = False
