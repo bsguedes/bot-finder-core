@@ -34,7 +34,7 @@ Please keep the name down to 8 characters.
 
 ### PUT /players/:player_name/move
 
-The API puts this payload in this call:
+The game sends this payload in this call:
 
 ```
 { 'vision': (VisionObject) }
@@ -48,6 +48,12 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 1: water (rivers and sea; impassable terrain) 
 2: tree (only on land; impassable)
 100..199 (a landmark; each landmark is unique and impassable)
+```
+
+The expected return value is one of the four possible directions in this format:
+
+```
+{ direction': (‘north’, ‘south’, ‘east’, ‘west’) }
 ```
 
 ### GET /players/:player_name/radio
