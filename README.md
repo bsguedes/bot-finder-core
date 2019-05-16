@@ -1,5 +1,17 @@
 # bot-finder-core
 
+## To install the core
+
+After cloning the repository:
+
+1. Install the UI dependencies (Ubuntu 18 should only need the last line): 
+`sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev`
+`sudo apt install python3-pil`
+`sudo apt install python3-pil.imagetk`
+`pip3 install -r requirements.txt`
+
+2. Run the game: `python3 main.py`
+
 ## Goal
 
 The game sets multiple bots into an island. These bots have limited vision, they can only see a few steps around them.
