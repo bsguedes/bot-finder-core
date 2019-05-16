@@ -4,13 +4,13 @@
 
 After cloning the repository:
 
-1. Install the UI dependencies (Ubuntu 18 should only need the last line): 
-`sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev`
-`sudo apt install python3-pil`
-`sudo apt install python3-pil.imagetk`
-`pip3 install -r requirements.txt`
+You're going to need Python3.5 at least (on Ubuntu 18, this shouldn't be necessary, only install the requirements).
 
-2. Run the game: `python3 main.py`
+To do that, follow the steps on https://tecadmin.net/install-python-3-5-on-ubuntu/
+
+If you did the steps above, install the requirements with `pip3.5 install -r requirements.txt`. Otherwise, `pip3 install -r requirements.txt`.
+
+Run the game: `python3 main.py`
 
 ## Goal
 
