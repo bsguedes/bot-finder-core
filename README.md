@@ -1,5 +1,17 @@
 # bot-finder-core
 
+## To install the core
+
+After cloning the repository:
+
+You're going to need Python3.5 at least (on Ubuntu 18, this shouldn't be necessary, only install the requirements).
+
+To do that, follow the steps on https://tecadmin.net/install-python-3-5-on-ubuntu/
+
+If you did the steps above, install the requirements with `sudo pip3.5 install -r requirements.txt`. Otherwise, `pip3 install -r requirements.txt`.
+
+Run the game: `python3 main.py`
+
 ## Goal
 
 The game sets multiple bots into an island. These bots have limited vision, they can only see a few steps around them.
@@ -34,7 +46,7 @@ Please keep the name down to 8 characters.
 
 ### PUT /players/:player_name/move
 
-The API puts this payload in this call:
+The game sends this payload in this call:
 
 ```
 { 'vision': (VisionObject) }
@@ -48,6 +60,12 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 1: water (rivers and sea; impassable terrain) 
 2: tree (only on land; impassable)
 100..199 (a landmark; each landmark is unique and impassable)
+```
+
+The expected return value is one of the four possible directions in this format:
+
+```
+{ direction': (‘north’, ‘south’, ‘east’, ‘west’) }
 ```
 
 ### GET /players/:player_name/radio
