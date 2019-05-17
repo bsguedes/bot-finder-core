@@ -56,8 +56,8 @@ small_parameters = {
     'rivers': 20,
     'river_level': 10,
     'landmarks': 100,
-    'vision_radius': 10,
-    'show_scores': False,
+    'vision_radius': 4,
+    'show_scores': True,
     'zoom': 2
 }
 
@@ -73,7 +73,7 @@ tiny_parameters = {
     'rivers': 5,
     'river_level': 10,
     'landmarks': 20,
-    'vision_radius': 10,
+    'vision_radius': 4,
     'show_scores': False,
     'zoom': 4
 }

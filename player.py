@@ -1,6 +1,5 @@
 import config
 import requests
-from requests.exceptions import RequestException
 
 
 class Player:    
@@ -18,7 +17,7 @@ class Player:
         try:
             r = requests.get('%s/players/name' % self.base_url)
             return r.json()['name']
-        except RequestException as e:
+        except Exception as e:
             if config.VERBOSE:
                 print(e)
             return default_name
@@ -29,7 +28,7 @@ class Player:
             r = requests.put('%s/players/%s/move' % (self.base_url, self.name), json=payload(vision),
                              headers={'Valid-Last-Move': str(self.last_move_valid)})
             direction = parse_response(r.json()['direction'])
-        except RequestException as e:
+        except Exception as e:
             if config.VERBOSE:
                 print(e)
             direction = -1
@@ -40,7 +39,7 @@ class Player:
         try:
             r = requests.get('%s/players/%s/radio' % (self.base_url, self.name))
             return r.json()['radio']
-        except RequestException as e:
+        except Exception as e:
             if config.VERBOSE:
                 print(e)
             return ''
@@ -48,7 +47,7 @@ class Player:
     def post_radio(self, radio_stream):
         try:
             requests.post('%s/players/%s/radio' % (self.base_url, self.name), json=radio_stream)
-        except RequestException as e:
+        except Exception as e:
             if config.VERBOSE:
                 print(e)
 
@@ -69,10 +68,10 @@ def parse_response(content):
     content = content.lower()
     if content == 'east':
         return 0
-    elif content == 'north':
+    elif content == 'south':
         return 1
     elif content == 'west':
         return 2
-    elif content == 'south':
+    elif content == 'north':
         return 3
     return -1
