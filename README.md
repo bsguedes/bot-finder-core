@@ -4,13 +4,25 @@
 
 After cloning the repository:
 
-You're going to need Python3.5 at least (on Ubuntu 18, this shouldn't be necessary, only install the requirements).
+You're going to need Python3.5 at least (on Ubuntu 18, this shouldn't be necessary, since it has Python 3.6 already).
 
-To do that, follow the steps on https://tecadmin.net/install-python-3-5-on-ubuntu/
+### If you need Python 3.5 (Ubuntu 14)
 
-If you did the steps above, install the requirements with `sudo pip3.5 install -r requirements.txt`. Otherwise, `pip3 install -r requirements.txt`.
+Follow the steps on https://tecadmin.net/install-python-3-5-on-ubuntu/
 
-If tkinter is not installed, install it with `sudo apt-get install python3.5-tk` or `sudo apt-get install python3.6-tk` (depending on your python version).
+If you did the steps above, install the project requirements with `sudo pip3.5 install -r requirements.txt`. 
+
+If tkinter is not installed, install it with `sudo apt-get install python3.5-tk`.
+
+Run the game: `python3 main.py`
+
+### If you already have Python 3.6 (Ubuntu 18)
+
+Install `pip` if it is not installed yet: `sudo apt-get install python3-pip` 
+
+Run `pip3 install -r requirements.txt`.
+
+Install tkinter: `sudo apt-get install python3.6-tk`
 
 Run the game: `python3 main.py`
 
@@ -54,7 +66,7 @@ The game sends this payload in this call:
 { 'vision': (VisionObject) }
 ```
 
-Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, containing what the bot currently sees. Each field has these possible values:
+Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, containing what the bot currently sees. **Your player will always be in the center of the square**. Each field has these possible values:
 
 ```
 -1: darkness (your sight does not reach the corners of the square)
@@ -62,13 +74,13 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 1: water (rivers and sea; impassable terrain) 
 2: tree (only on land; impassable)
 100..199 (a landmark; each landmark is unique and impassable)
-1000+x (a player, where x is the player ID). your player will always be in the center of the square 
+1000, 1001, 1002, ... 1000 + x (a player, where x is the player ID) 
 ```
 
 The expected return value is one of the four possible directions in this format:
 
 ```
-{ 'direction': (‘north’, ‘south’, ‘east’, ‘west’) }
+{ 'direction': ('north', 'south', 'east', 'west') }
 ```
 
 ### GET /players/:player_name/radio
@@ -97,4 +109,4 @@ Radio messages are not necessarily synced.
 
 ## Example
 
-An very simple example of a bot can be found in my bot-finder-player repository.
+An very simple example of a bot can be found in my bot-finder-player repository on GitHub.

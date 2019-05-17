@@ -16,7 +16,9 @@ class Player:
     def obtain_name(self, default_name):
         try:
             r = requests.get('%s/players/name' % self.base_url)
-            return r.json()['name']
+            name = r.json()['name']
+            print('Got player %s, nickname %s, url: %s' % (self.player_id, name, self.base_url))
+            return name
         except Exception as e:
             if config.VERBOSE:
                 print(e)
