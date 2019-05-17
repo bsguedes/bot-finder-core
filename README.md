@@ -10,6 +10,8 @@ To do that, follow the steps on https://tecadmin.net/install-python-3-5-on-ubunt
 
 If you did the steps above, install the requirements with `sudo pip3.5 install -r requirements.txt`. Otherwise, `pip3 install -r requirements.txt`.
 
+If tkinter is not installed, install it with `sudo apt-get install python3.5-tk` or `sudo apt-get install python3.6-tk` (depending on your python version).
+
 Run the game: `python3 main.py`
 
 ## Goal
