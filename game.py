@@ -42,7 +42,7 @@ class Game:
     def player_step(self, player):
         if not self.completed:
             map_lock.acquire()
-            vision, landmarks = self.map.get_vision(player.x, player.y)
+            vision, landmarks = self.map.get_vision(player.x, player.y, self.players, player.player_id)
             for landmark in landmarks:
                 self.landmarks[landmark] = True
             map_lock.release()

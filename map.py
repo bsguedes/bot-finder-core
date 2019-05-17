@@ -74,7 +74,7 @@ class Map:
         y += config.DIRS[direction][1]
         return not self.trees[x][y] and not (x, y) in self.landmarks and self.board[x][y] > self.water_level
 
-    def get_vision(self, x, y):
+    def get_vision(self, x, y, players, pid):
         d = (self.vision_radius * 2) + 1
         vision = [[-1] * d for y in range(d)]
         x1 = x - self.vision_radius
@@ -85,7 +85,9 @@ class Map:
                 if (i - self.vision_radius)**2 + (j - self.vision_radius)**2 - self.vision_radius**2 <= 4:
                     v = self.board[x1+i][y1+j]
                     t = self.trees[x1+i][y1+j]
-                    if (x1 + i, y1 + j) in self.landmarks:
+                    if i == self.vision_radius and j == self.vision_radius:
+                        vision[i][j] = 1000 + pid
+                    elif (x1 + i, y1 + j) in self.landmarks:
                         landmarks.append(self.landmarks.index((x1 + i, y1 + j)))
                         vision[i][j] = self.top_level + self.landmarks.index((x1 + i, y1 + j))
                     elif v < self.water_level:
@@ -93,7 +95,14 @@ class Map:
                     elif t > self.tree_level:
                         vision[i][j] = 2
                     else:
-                        vision[i][j] = 0
+                        is_player = False
+                        for p in players:
+                            if p.x == x1 + i and p.y == y1 + j:
+                                is_player = True
+                                vision[i][j] = p.player_id + 1000
+                                break
+                        if not is_player:
+                            vision[i][j] = 0
         return vision, landmarks
 
     def find_water_point(self):
