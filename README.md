@@ -77,7 +77,9 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 1000, 1001, 1002, ... 1000 + x (a player, where x is the player ID) 
 ```
 
-The expected return value is one of the four possible directions in this format:
+There is also a custom header, `Valid-Last-Move`, which contains a boolean value informing if the last move the player executed was valid or not.
+
+The expected return value from the bots is one of the four possible directions in this format:
 
 ```
 { 'direction': ('north', 'south', 'east', 'west') }
