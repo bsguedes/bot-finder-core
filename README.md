@@ -112,3 +112,11 @@ Radio messages are not necessarily synced.
 ## Example
 
 An very simple example of a bot can be found in my bot-finder-player repository on GitHub.
+
+## To run a server at internal network
+
+Start a server disabling proxy and binding it to 0.0.0.0:
+
+```
+unset http_proxy; unset HTTP_PROXY; rails s --binding 0.0.0.0
+```
