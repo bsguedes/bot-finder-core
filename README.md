@@ -73,7 +73,7 @@ Where `VisionObject` is an integer 2D array, indexed first by `x` then by `y`, c
 0: land (walkable terrain)
 1: water (rivers and sea; impassable terrain) 
 2: tree (only on land; impassable)
-100..199 (a landmark; each landmark is unique and impassable)
+100..999 (a landmark; each landmark is unique and impassable)
 1000, 1001, 1002, ... 1000 + x (a player, where x is the player ID) 
 ```
 
